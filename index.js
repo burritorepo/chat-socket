@@ -15,11 +15,13 @@ app.get('/chat', (req, res) => {
 
 let users = new Set();
 io.on('connection', (socket) => {
-  console.log('a user connected');
-
   socket.on('channel_connectUser', (user) => {
     const arrayUsers = Array.from(users.add(user))
     io.emit('channel_connectUser', arrayUsers);
+  })
+
+  socket.on('channel_messages', (messages) => {
+    io.emit('channel_messages', messages);
   })
 });
 

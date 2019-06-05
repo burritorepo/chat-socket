@@ -47,6 +47,7 @@ Pag chat
 
 .chat-main {
   padding: 20px;
+  height: 80vh;
 }
 
 .chat-header {
@@ -56,6 +57,7 @@ Pag chat
   height: 70px;
   display: flex;
   align-items: center;
+  height: 10vh;
 }
 
 .chat-header h2 {
@@ -86,15 +88,16 @@ Pag chat
   bottom: 0;
   right: 0;
   left: 200px;
+  height: 10vh;
 }
 
-.chat-footer textarea {
+.chat-footer input {
   width: 100%;
   resize: none;
   display: block;
   border-left: none;
   border-right: 0;
-  min-height: 100px;
+  height: 61px;
 }
 
 .chat-header-users {
@@ -189,4 +192,26 @@ List users
   height: 10px;
   background: green;
   border-radius: 100%;
+}
+
+
+/*
+Bubbles
+*/
+
+.messages {
+  padding: 15px 0;
+}
+
+.wrap-buble {
+  margin: 0 0 20px;
+}
+
+.bubble-message {
+  display: inline-block;
+  padding: 10px;
+  background: #a2fea2;
+  color: #4e4e4e;
+  border-radius: 5px;
+  margin-top: 5px;
 }

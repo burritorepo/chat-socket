@@ -26,11 +26,11 @@
         </header>
         <main class="chat-main">
           <div class="js_wellcome_user"></div>
+          <div class="js_messages messages"></div>
         </main>
         <footer class="chat-footer">
           <form>
-            <textarea class="form-control" required type="text">
-            </textarea>
+            <input class="form-control" required type="text" />
           </form>
         </footer>
       </div>
@@ -51,24 +51,24 @@
     };
 
     function htmlListUsers(users) {
-        const usersFilter = users.filter(user => user !== sessionStorage.getItem('user'));
-        const container = document.querySelector('.js_list_users');
-        container.innerHTML = '';
+      const usersFilter = users.filter(user => user !== sessionStorage.getItem('user'));
+      const container = document.querySelector('.js_list_users');
+      container.innerHTML = '';
 
-        let totalUsers = 0;
-        const containerTotalUsers = document.querySelector('.js_total_users');
+      let totalUsers = 0;
+      const containerTotalUsers = document.querySelector('.js_total_users');
 
-        usersFilter.map((user) => {
-          totalUsers++;
-          const div = document.createElement('div');
-          div.classList.add('item-user');
-          div.innerHTML = `${user} <span class="connected"></span>`;
+      usersFilter.map((user) => {
+        totalUsers++;
+        const div = document.createElement('div');
+        div.classList.add('item-user');
+        div.innerHTML = `${user} <span class="connected"></span>`;
 
-          container.appendChild(div);
-        });            
+        container.appendChild(div);
+      });
 
-        containerTotalUsers.innerHTML = `<div class="dotted-connected">${totalUsers}</div>`;
-        
+      containerTotalUsers.innerHTML = `<div class="dotted-connected">${totalUsers}</div>`;
+
     }
 
     function connectUser() {
@@ -77,9 +77,43 @@
       socket.on('channel_connectUser', htmlListUsers)
     }
 
+    function htmlMessages(objMessages) {
+      const container = document.querySelector('.js_messages');
+      const message = document.createElement('div');
+      message.classList.add('wrap-buble');
+      message.innerHTML = `<div class="bubble">
+        <div class="bubble-user">
+          ${objMessages.from} dice: 
+        </div>
+        <div class="bubble-message">
+          ${objMessages.message}
+        </div>
+      </div>`;
+
+      container.appendChild(message);
+    }
+
+    function submitMessages() {
+      const form = document.querySelector('form');
+      const input = document.querySelector('input');
+
+      form.onsubmit = (e) => {
+        e.preventDefault();
+
+        socket.emit('channel_messages', {
+          from: sessionStorage.getItem('user'),
+          message: input.value
+        });
+        input.value = '';
+      }
+
+      socket.on('channel_messages', htmlMessages)
+    }
+
     function init() {
-      wellcomeUser(); 
+      wellcomeUser();
       connectUser();
+      submitMessages();
     }
 
     (sessionStorage.getItem('user')) ? init() : location.href = '/'
