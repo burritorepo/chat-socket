@@ -97,6 +97,24 @@ Pag chat
   min-height: 100px;
 }
 
+.chat-header-users {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dotted-connected {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: white;
+  color: red;
+  text-align: center;
+  font-weight: bold;
+  font-size: 11px;
+  line-height: 20px;
+}
+
 /*
 Forms
 */
@@ -145,4 +163,30 @@ Alerts
   border: 1px solid #6e6ef7;
   color: black;
   font-weight: bold;
+}
+
+/*
+List users
+*/
+.list-users {
+  
+}
+
+.item-user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  padding: 10px;
+}
+
+.item-user:hover {
+  background: #ededed;
+}
+
+.connected {
+  width: 10px;
+  height: 10px;
+  background: green;
+  border-radius: 100%;
 }
