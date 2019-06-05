@@ -13,8 +13,14 @@ app.get('/chat', (req, res) => {
   res.sendFile(__dirname + '/chat.html');
 });
 
-io.on('connection', (req, res) => {
+let users = new Set();
+io.on('connection', (socket) => {
   console.log('a user connected');
+
+  socket.on('channel_connectUser', (user) => {
+    const arrayUsers = Array.from(users.add(user))
+    io.emit('channel_connectUser', arrayUsers);
+  })
 });
 
 http.listen(3000, (req, res) => {

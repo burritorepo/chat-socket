@@ -135,4 +135,14 @@ Buttons
   cursor: pointer;
 }
 
+/*
+Alerts
+*/
 
+.alert {
+  padding: 10px;
+  background: #bae5ff;
+  border: 1px solid #6e6ef7;
+  color: black;
+  font-weight: bold;
+}
