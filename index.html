@@ -15,13 +15,38 @@
     <form>
       <div class="form-row">
         <label class="text-center">Nickname</label>
-        <input class="form-control" required type="text">
+        <input class="js_user form-control" required type="text">
       </div>
       <div class="form-row text-center">
         <button class="btn" type="submit">Enviar</button>
       </div>
     </form>
   </div>
+
+  <script>
+
+    function clearSession() {
+      sessionStorage.clear();
+    }
+
+    function registerUser() {
+      const user = document.querySelector('.js_user');
+      const form = document.querySelector('form');
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        sessionStorage.setItem('user', user.value);
+        user.value = '';
+        location.href = '/chat';
+      }
+    }
+
+    function init(){
+      clearSession();
+      registerUser();
+    }
+
+    init();
+  </script>
 </body>
 
 </html>
