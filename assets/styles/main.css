@@ -1,0 +1,74 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: arial;
+  font-size: 13px;
+}
+
+input,
+input:focus,
+a,
+button,
+button:focus {
+  outline: none;
+}
+
+/*
+Page nickname
+*/
+.pag-nickname {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.pag-nickname h1 {
+  font-size: 48px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  color: #061d93;
+  text-shadow: 1px 1px 1px red, -2px 1px 1px purple, 0px 3px 3px green;
+}
+
+/*
+Forms
+*/
+.form-control {
+  padding: 10px;
+  border: 1px solid #cdcdcd;
+  color: #878787;
+  min-width: 250px;
+}
+
+.form-row {
+  margin-bottom: 20px;
+}
+
+.form-row label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/*
+Helpers
+*/
+.text-center {
+  text-align: center;
+}
+
+/*
+Buttons
+*/
+.btn {
+  border: 0;
+  background: red;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+}
