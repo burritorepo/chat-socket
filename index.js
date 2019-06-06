@@ -18,11 +18,17 @@ io.on('connection', (socket) => {
   socket.on('channel_connectUser', (user) => {
     const arrayUsers = Array.from(users.add(user))
     io.emit('channel_connectUser', arrayUsers);
+  });
+
+  socket.on('channel_disconnectUser', (user) => {
+    users.delete(user);
+    const arrayUsers = Array.from(users);
+    io.emit('channel_disconnectUser', arrayUsers, user);
   })
 
   socket.on('channel_messages', (messages) => {
     io.emit('channel_messages', messages);
-  })
+  });
 });
 
 http.listen(3000, (req, res) => {

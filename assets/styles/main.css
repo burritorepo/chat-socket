@@ -18,6 +18,10 @@ textarea:focus {
   outline: none;
 }
 
+a {
+  text-decoration: none;
+}
+
 /*
 Page nickname
 */
@@ -58,6 +62,12 @@ Pag chat
   display: flex;
   align-items: center;
   height: 10vh;
+  position: flex;
+  justify-content: space-between;
+}
+
+.chat-header a {
+  color: white;
 }
 
 .chat-header h2 {

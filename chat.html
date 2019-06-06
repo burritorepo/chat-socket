@@ -23,6 +23,7 @@
       <div class="chat-right">
         <header class="chat-header">
           <h1>CHAT CODIGO</h1>
+          <a class="js_logout" href="#">Logout</a>
         </header>
         <main class="chat-main">
           <div class="js_wellcome_user"></div>
@@ -38,7 +39,8 @@
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    var socket = io();
+    let usersConnected = new Set();
+    let socket = io();
     function wellcomeUser() {
       const div = document.createElement('div');
       div.classList.add('alert');
@@ -71,10 +73,36 @@
 
     }
 
+    function htmlUserConnected(users) {
+      const newUser = users[users.length - 1];
+      usersConnected.add(newUser);
+
+      if (sessionStorage.getItem('user') !== newUser) {
+        const container = document.querySelector('.js_messages');
+        const div = document.createElement('div');
+        div.classList.add('alert');
+        div.innerHTML = `${newUser} se conecto`;
+
+        container.appendChild(div)
+      }
+    }
+
+    function htmlUserDisConnected(user) {
+      const container = document.querySelector('.js_messages');
+      const div = document.createElement('div');
+      div.classList.add('alert');
+      div.innerHTML = `${user} se desconecto`;
+
+      container.appendChild(div)
+    }
+
     function connectUser() {
       const user = sessionStorage.getItem('user');
       socket.emit('channel_connectUser', user);
-      socket.on('channel_connectUser', htmlListUsers)
+      socket.on('channel_connectUser', (users) => {
+        htmlListUsers(users);
+        htmlUserConnected(users);
+      })
     }
 
     function htmlMessages(objMessages) {
@@ -110,10 +138,24 @@
       socket.on('channel_messages', htmlMessages)
     }
 
+    function logout() {
+      const button = document.querySelector('.js_logout');
+      button.onclick = (e) => {
+        e.preventDefault();
+        location.href = '/'
+      }
+
+      socket.on('channel_disconnectUser', (users, user) => {
+        htmlListUsers(users);
+        htmlUserDisConnected(user);
+      })
+    }
+
     function init() {
       wellcomeUser();
       connectUser();
       submitMessages();
+      logout();
     }
 
     (sessionStorage.getItem('user')) ? init() : location.href = '/'

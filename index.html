@@ -23,9 +23,13 @@
     </form>
   </div>
 
+  <script src="/socket.io/socket.io.js"></script>
   <script>
+    let socket = io();
 
     function clearSession() {
+      const user = sessionStorage.getItem('user');
+      socket.emit('channel_disconnectUser', user);
       sessionStorage.clear();
     }
 
