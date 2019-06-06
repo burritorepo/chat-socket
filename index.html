@@ -39,12 +39,13 @@
       form.onsubmit = (e) => {
         e.preventDefault();
         sessionStorage.setItem('user', user.value);
+        socket.emit('channel_connectUser', user.value);
         user.value = '';
         location.href = '/chat';
       }
     }
 
-    function init(){
+    function init() {
       clearSession();
       registerUser();
     }

@@ -17,6 +17,7 @@ let users = new Set();
 io.on('connection', (socket) => {
   socket.on('channel_connectUser', (user) => {
     const arrayUsers = Array.from(users.add(user))
+    console.log('users', arrayUsers)
     io.emit('channel_connectUser', arrayUsers);
   });
 

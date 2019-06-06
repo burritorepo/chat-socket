@@ -97,9 +97,8 @@
     }
 
     function connectUser() {
-      const user = sessionStorage.getItem('user');
-      socket.emit('channel_connectUser', user);
       socket.on('channel_connectUser', (users) => {
+        console.log('users', users)
         htmlListUsers(users);
         htmlUserConnected(users);
       })
