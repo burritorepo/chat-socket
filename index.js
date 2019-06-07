@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
 
   socket.on('channel_disconnectUser', (user) => {
     var removeIndex = usersConnected
-    .map(item => item.user ).indexOf(user);   
+      .map(item => item.user).indexOf(user);
     usersConnected.splice(removeIndex, 1);
     io.emit('channel_disconnectUser', usersConnected, user);
   })
@@ -50,6 +50,9 @@ io.on('connection', (socket) => {
   });
 });
 
-http.listen(3000, (req, res) => {
+const port = process.env.PORT || 3000
+
+
+http.listen(port, (req, res) => {
   console.log('listening on *:3000');
 });
