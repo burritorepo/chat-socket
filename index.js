@@ -16,9 +16,8 @@ app.get('/chat', (req, res) => {
 let usersConnected = [];
 io.on('connection', (socket) => {
   socket.on('channel_connectUser', (user) => {
-    const copyUser = Object.assign({}, user);
     usersConnected.push(user);
-    const userFiltered = usersConnected.reduce((acc, current) => {
+    let userFiltered = usersConnected.reduce((acc, current) => {
       const x = acc.find(item => item.user === current.user);
       if (!x) {
         return acc.concat([current]);
@@ -28,18 +27,22 @@ io.on('connection', (socket) => {
     }, []);
 
     if (!user.firstTime) {
-      
+      userFiltered = userFiltered.map((user) => {
+        return {
+          ...user,
+          firstTime: false
+        }
+      })
     }
     usersConnected = userFiltered;
-
-    // console.log('usersFitered', userFiltered)
-    // io.emit('channel_connectUser', userFiltered);
+    io.emit('channel_connectUser', usersConnected);
   });
 
   socket.on('channel_disconnectUser', (user) => {
-    // users.delete(user);
-    // const arrayUsers = Array.from(users);
-    // io.emit('channel_disconnectUser', arrayUsers, user);
+    var removeIndex = usersConnected
+    .map(item => item.user ).indexOf(user);   
+    usersConnected.splice(removeIndex, 1);
+    io.emit('channel_disconnectUser', usersConnected, user);
   })
 
   socket.on('channel_messages', (messages) => {

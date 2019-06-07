@@ -42,29 +42,24 @@
     let usersConnected = new Set();
     let socket = io();
     function wellcomeUser() {
-      const div = document.createElement('div');
-      div.classList.add('alert');
       const user = sessionStorage.getItem('user');
       const container = document.querySelector('.js_wellcome_user');
-
-      div.innerHTML = `Bienvenido ${user}`;
-
-      container.appendChild(div);
+      alertGenerator(user, container);
     };
 
     function htmlListUsers(users) {
-      const usersFilter = users.filter(user => user !== sessionStorage.getItem('user'));
+      const usersFilter = users.filter(item => item.user !== sessionStorage.getItem('user'));
       const container = document.querySelector('.js_list_users');
       container.innerHTML = '';
 
       let totalUsers = 0;
       const containerTotalUsers = document.querySelector('.js_total_users');
 
-      usersFilter.map((user) => {
+      usersFilter.map((item) => {
         totalUsers++;
         const div = document.createElement('div');
         div.classList.add('item-user');
-        div.innerHTML = `${user} <span class="connected"></span>`;
+        div.innerHTML = `${item.user} <span class="connected"></span>`;
 
         container.appendChild(div);
       });
@@ -75,25 +70,40 @@
 
     function htmlUserConnected(users) {
       const newUser = users[users.length - 1];
-      usersConnected.add(newUser);
-
-      if (sessionStorage.getItem('user') !== newUser) {
-        const container = document.querySelector('.js_messages');
-        const div = document.createElement('div');
-        div.classList.add('alert');
-        div.innerHTML = `${newUser} se conecto`;
-
-        container.appendChild(div)
+      if (newUser.firstTime) {
+        if (sessionStorage.getItem('user') !== newUser.user) {
+          const container = document.querySelector('.js_messages');
+          alertGenerator(newUser.user, container, 'info');
+        }
       }
+    }
+
+    function alertGenerator(user, container, type) {
+      const div = document.createElement('div');
+      div.classList.add('alert');
+      div.innerHTML = `Bienvenido ${user}`;
+
+      if (type === 'info') {
+        div.classList.add('alert-info');
+        div.innerHTML = `${user} se conecto`;
+      } else if (type === 'danger') {
+        div.classList.add('alert-danger');
+        div.innerHTML = `${user} se desconecto`;
+      }
+
+      container.appendChild(div);
+
+      // setTimeout(() => {
+      //   div.classList.add('fx')
+      //   setTimeout(() => {
+      //     div.remove();
+      //   }, 1000)
+      // }, 3000)
     }
 
     function htmlUserDisConnected(user) {
       const container = document.querySelector('.js_messages');
-      const div = document.createElement('div');
-      div.classList.add('alert');
-      div.innerHTML = `${user} se desconecto`;
-
-      container.appendChild(div)
+      alertGenerator(user, container, 'danger');
     }
 
     function connectUser() {
@@ -107,16 +117,13 @@
         firstTime = false;
       }
 
-      console.log('firstTime', firstTime)
-
       socket.emit('channel_connectUser', {
         user,
         firstTime
       });
       socket.on('channel_connectUser', (users) => {
-        console.log('users', users)
-        // htmlListUsers(users);
-        // htmlUserConnected(users);
+        htmlListUsers(users);
+        htmlUserConnected(users);
       })
     }
 
@@ -126,7 +133,7 @@
       message.classList.add('wrap-buble');
       message.innerHTML = `<div class="bubble">
         <div class="bubble-user">
-          ${objMessages.from} dice: 
+          <b>${objMessages.from}</b> dice: 
         </div>
         <div class="bubble-message">
           ${objMessages.message}
@@ -139,15 +146,18 @@
     function submitMessages() {
       const form = document.querySelector('form');
       const input = document.querySelector('input');
+      const main = document.querySelector('.chat-main');
 
       form.onsubmit = (e) => {
         e.preventDefault();
-
         socket.emit('channel_messages', {
           from: sessionStorage.getItem('user'),
           message: input.value
         });
-        input.value = '';
+        input.value = '';        
+        setTimeout(() => {
+          main.scrollTop = main.scrollHeight;
+        }, 0)
       }
 
       socket.on('channel_messages', htmlMessages)
@@ -171,8 +181,6 @@
       connectUser();
       submitMessages();
       logout();
-
-
     }
 
     (sessionStorage.getItem('user')) ? init() : location.href = '/'
