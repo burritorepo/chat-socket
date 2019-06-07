@@ -97,10 +97,26 @@
     }
 
     function connectUser() {
+      const user = sessionStorage.getItem('user');
+      let firstTime;
+
+      if (sessionStorage.getItem('firstTime') === 'true') {
+        firstTime = true;
+        sessionStorage.setItem('firstTime', false)
+      } else {
+        firstTime = false;
+      }
+
+      console.log('firstTime', firstTime)
+
+      socket.emit('channel_connectUser', {
+        user,
+        firstTime
+      });
       socket.on('channel_connectUser', (users) => {
         console.log('users', users)
-        htmlListUsers(users);
-        htmlUserConnected(users);
+        // htmlListUsers(users);
+        // htmlUserConnected(users);
       })
     }
 
@@ -155,6 +171,8 @@
       connectUser();
       submitMessages();
       logout();
+
+
     }
 
     (sessionStorage.getItem('user')) ? init() : location.href = '/'

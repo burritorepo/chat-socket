@@ -176,6 +176,7 @@ Alerts
   border: 1px solid #6e6ef7;
   color: black;
   font-weight: bold;
+  margin-bottom: 15px;
 }
 
 /*
@@ -210,11 +211,11 @@ Bubbles
 */
 
 .messages {
-  padding: 15px 0;
+  
 }
 
 .wrap-buble {
-  margin: 0 0 20px;
+  margin: 0 0 15px;
 }
 
 .bubble-message {

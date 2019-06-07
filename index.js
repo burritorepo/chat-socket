@@ -13,18 +13,33 @@ app.get('/chat', (req, res) => {
   res.sendFile(__dirname + '/chat.html');
 });
 
-let users = new Set();
+let usersConnected = [];
 io.on('connection', (socket) => {
   socket.on('channel_connectUser', (user) => {
-    const arrayUsers = Array.from(users.add(user))
-    console.log('users', arrayUsers)
-    io.emit('channel_connectUser', arrayUsers);
+    const copyUser = Object.assign({}, user);
+    usersConnected.push(user);
+    const userFiltered = usersConnected.reduce((acc, current) => {
+      const x = acc.find(item => item.user === current.user);
+      if (!x) {
+        return acc.concat([current]);
+      } else {
+        return acc;
+      }
+    }, []);
+
+    if (!user.firstTime) {
+      
+    }
+    usersConnected = userFiltered;
+
+    // console.log('usersFitered', userFiltered)
+    // io.emit('channel_connectUser', userFiltered);
   });
 
   socket.on('channel_disconnectUser', (user) => {
-    users.delete(user);
-    const arrayUsers = Array.from(users);
-    io.emit('channel_disconnectUser', arrayUsers, user);
+    // users.delete(user);
+    // const arrayUsers = Array.from(users);
+    // io.emit('channel_disconnectUser', arrayUsers, user);
   })
 
   socket.on('channel_messages', (messages) => {

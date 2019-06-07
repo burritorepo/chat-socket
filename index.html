@@ -29,7 +29,9 @@
 
     function clearSession() {
       const user = sessionStorage.getItem('user');
-      socket.emit('channel_disconnectUser', user);
+      if (user) {
+        socket.emit('channel_disconnectUser', user);
+      }
       sessionStorage.clear();
     }
 
@@ -39,7 +41,7 @@
       form.onsubmit = (e) => {
         e.preventDefault();
         sessionStorage.setItem('user', user.value);
-        socket.emit('channel_connectUser', user.value);
+        sessionStorage.setItem('firstTime', true);
         user.value = '';
         location.href = '/chat';
       }
